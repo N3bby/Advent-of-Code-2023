@@ -1,5 +1,7 @@
 package ext
 
+import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -50,5 +52,12 @@ class StringExtensionsKtTest {
         """.trimIndent()
 
         assertEquals(expected, input.reversedPerLine())
+    }
+
+    @Test
+    fun string_hasSubstringAt() {
+        assertThat("helloWorld".hasSubstringAt(0, "hello")).isTrue()
+        assertThat("123helloWorld".hasSubstringAt(0, "hello")).isFalse()
+        assertThat("123helloWorld".hasSubstringAt(3, "hello")).isTrue()
     }
 }

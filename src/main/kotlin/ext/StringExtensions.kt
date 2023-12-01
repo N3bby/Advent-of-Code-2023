@@ -20,3 +20,7 @@ fun String.reversedPerLine(): String {
         .map { it.reversed() }
         .joinToString("\n")
 }
+
+fun String.hasSubstringAt(index: Int, substring: String): Boolean {
+    return substring(startIndex = index).startsWith(substring)
+}
