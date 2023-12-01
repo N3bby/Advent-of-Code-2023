@@ -7,22 +7,17 @@ fun getSumOfCalibrationValues(lines: List<String>, readStringsAsDigits: Boolean)
 }
 
 fun getCalibrationValue(line: String, readStringsAsDigits: Boolean): Int {
-    val stringToDigitMap = if (readStringsAsDigits) extendedStringToDigitMap else digitStringToDigitMap
-    return (line.firstDigitFromFront(stringToDigitMap) + line.firstDigitFromBack(stringToDigitMap)).toInt()
+    val digits = getDigits(line, readStringsAsDigits).map { it.toString() }
+    return (digits.first + digits.last).toInt()
 }
 
-fun String.firstDigitFromFront(stringToDigitMap: Map<String, Int>): String {
-    for (i in indices) {
-        val matchingDigit = stringToDigitMap
-            .filter { stringToDigit -> this.hasSubstringAt(i, stringToDigit.key) }
+fun getDigits(line: String, readStringsAsDigits: Boolean): List<Int> {
+    val stringToDigitMap = if (readStringsAsDigits) extendedStringToDigitMap else digitStringToDigitMap
+    return line
+        .mapIndexed { index, _ -> stringToDigitMap
+            .filter { line.hasSubstringAt(index, it.key) }
             .map { it.value }
             .firstOrNull()
-        if (matchingDigit != null) {
-            return matchingDigit.toString()
         }
-    }
-    throw IllegalArgumentException("String '${this}' contains no digits")
+        .filterNotNull()
 }
-
-fun String.firstDigitFromBack(stringToDigitMap: Map<String, Int>) =
-    reversed().firstDigitFromFront(stringToDigitMap.mapKeys { it.key.reversed() })
