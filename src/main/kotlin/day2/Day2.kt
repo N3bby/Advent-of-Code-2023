@@ -15,18 +15,13 @@ data class Game(val id: Int, val sets: List<GameSet>) {
     }
 
     private fun getMinimumRequiredBag(): Bag {
-        val minimumRequiredBag = mutableMapOf<Color, Int>()
-        sets.forEach { set ->
-            set.cubes.forEach { setItem ->
-                val color = setItem.key
-                val amount = setItem.value
-
-                if (color !in minimumRequiredBag || amount > minimumRequiredBag[color]!!) {
-                    minimumRequiredBag[color] = amount
-                }
-            }
+        val colors = sets.flatMap { it.cubes.keys }.toSet()
+        val minimumRequiredCubes = colors.associateWith { color ->
+            sets
+                .map { it.cubes[color] ?: 0 }
+                .max()
         }
-        return Bag(minimumRequiredBag)
+        return Bag(minimumRequiredCubes)
     }
 }
 
