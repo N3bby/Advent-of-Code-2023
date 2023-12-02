@@ -19,14 +19,16 @@ class Day2Test {
         val input = "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green"
         val game = parseGame(input)
 
-        assertThat(game).isEqualTo(Game(
-            1,
-            listOf(
-                GameSet(mapOf(Pair("blue", 3), Pair("red", 4))),
-                GameSet(mapOf(Pair("red", 1), Pair("green", 2), Pair("blue", 6))),
-                GameSet(mapOf(Pair("green", 2))),
+        assertThat(game).isEqualTo(
+            Game(
+                1,
+                listOf(
+                    GameSet(mapOf(Pair("blue", 3), Pair("red", 4))),
+                    GameSet(mapOf(Pair("red", 1), Pair("green", 2), Pair("blue", 6))),
+                    GameSet(mapOf(Pair("green", 2))),
+                )
             )
-        ))
+        )
     }
 
     @Test
@@ -66,7 +68,7 @@ class Day2Test {
         """.trimIndent()
         val games = parseGames(input.lines())
 
-        val sumOfPowers = games.sumOf { it.getPower() }
+        val sumOfPowers = games.sumOf { it.getGamePower() }
 
         assertThat(sumOfPowers).isEqualTo(2286)
     }
@@ -74,7 +76,7 @@ class Day2Test {
     @Test
     fun `part 2 - puzzle input`() {
         val games = parseGames(readInput(2).lines())
-        val sumOfPowers = games.sumOf { it.getPower() }
+        val sumOfPowers = games.sumOf { it.getGamePower() }
 
         assertThat(sumOfPowers).isEqualTo(55593)
     }
