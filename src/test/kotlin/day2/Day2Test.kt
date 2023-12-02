@@ -8,9 +8,9 @@ class Day2Test {
 
     private val bag = Bag(
         mapOf(
-            Pair("red", 12),
-            Pair("green", 13),
-            Pair("blue", 14)
+            "red" to 12,
+            "green" to 13,
+            "blue" to 14
         )
     )
 
@@ -23,9 +23,9 @@ class Day2Test {
             Game(
                 1,
                 listOf(
-                    GameSet(mapOf(Pair("blue", 3), Pair("red", 4))),
-                    GameSet(mapOf(Pair("red", 1), Pair("green", 2), Pair("blue", 6))),
-                    GameSet(mapOf(Pair("green", 2))),
+                    GameSet(mapOf("blue" to 3, "red" to 4)),
+                    GameSet(mapOf("red" to 1, "green" to 2, "blue" to 6)),
+                    GameSet(mapOf("green" to 2)),
                 )
             )
         )

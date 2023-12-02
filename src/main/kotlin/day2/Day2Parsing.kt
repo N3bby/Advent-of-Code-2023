@@ -36,6 +36,6 @@ fun parseGameSetItem(setItem: String): Pair<Color, Int> {
     val amount = tokens[0].toInt()
     val color = tokens[1]
 
-    return Pair(color, amount)
+    return color to amount
 }
 
