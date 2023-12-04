@@ -6,8 +6,8 @@ import java.util.Queue
 import kotlin.math.pow
 
 data class Scratchcard(val id: Int, val winningNumbers: List<Int>, val numbers: List<Int>) {
-    val matchingNumbers get() = winningNumbers.toSet().intersect(numbers.toSet()).size
-    val points get() = 2.0.pow(matchingNumbers - 1).toInt()
+    val matchingNumbers = winningNumbers.toSet().intersect(numbers.toSet()).size
+    val points = 2.0.pow(matchingNumbers - 1).toInt()
 }
 
 data class ScratchcardCollection(private val scratchcards: List<Scratchcard>) {
