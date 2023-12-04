@@ -1,6 +1,8 @@
 package day4
 
 import java.lang.IllegalArgumentException
+import java.util.LinkedList
+import java.util.Queue
 import kotlin.math.pow
 
 data class Scratchcard(val id: Int, val winningNumbers: List<Int>, val numbers: List<Int>) {
@@ -14,17 +16,17 @@ data class ScratchcardCollection(private val scratchcards: List<Scratchcard>) {
     val totalPoints get() = scratchcards.sumOf { it.points }
 
     val totalNumberOfScratchcards: Int get() {
-        val scratchcardsToProcess = scratchcards.toMutableList()
-        var itemToProcess = 0
+        val scratchcardsToProcess: Queue<Scratchcard> = LinkedList(scratchcards)
+        var scratchcardsProcessed = 0
 
-        while (itemToProcess < scratchcardsToProcess.size) {
-            val scratchcard = scratchcardsToProcess[itemToProcess]
+        while (scratchcardsToProcess.peek() != null) {
+            val scratchcard = scratchcardsToProcess.poll()
             val idsOfCopiesToProcess = scratchcard.id + 1.. scratchcard.id + scratchcard.matchingNumbers
             scratchcardsToProcess.addAll(idsOfCopiesToProcess.map { scratchcardsById[it]!! })
-            itemToProcess++
+            scratchcardsProcessed++
         }
 
-        return scratchcardsToProcess.size
+        return scratchcardsProcessed
     }
 }
 
