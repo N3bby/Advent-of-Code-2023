@@ -30,6 +30,12 @@ class LongRangeExtensionsKtTest {
     }
 
     @Test
+    fun `intersect - returns source range if given range completely contains it`() {
+        val overlap = (369583040L .. 369875982L).intersect(313833516L..429550890L)
+        assertThat(overlap).isEqualTo(369583040L .. 369875982L)
+    }
+
+    @Test
     fun `difference - returns null if range is contained within`() {
         val difference = (1L..10L).difference(2L..6L)
         assertThat(difference).isEmpty()
@@ -57,6 +63,18 @@ class LongRangeExtensionsKtTest {
     fun `difference - returns parts that do not overlap at the lower and upper end if given range fully contains range`() {
         val difference = (5L..10L).difference(1L..15L)
         assertThat(difference).isEqualTo(listOf(1L..4L, 11L..15L))
+    }
+
+    @Test
+    fun `difference - returns parts that do not overlap at the lower and upper end if given range fully contains range upper exact`() {
+        val difference = (5L..10L).difference(1L..10L)
+        assertThat(difference).isEqualTo(listOf(1L..4L))
+    }
+
+    @Test
+    fun `difference - returns parts that do not overlap at the lower and upper end if given range fully contains range lower exact`() {
+        val difference = (5L..10L).difference(5L..15L)
+        assertThat(difference).isEqualTo(listOf(11L..15L))
     }
 
 }

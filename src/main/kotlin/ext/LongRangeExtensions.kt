@@ -1,18 +1,19 @@
 package ext
 
 fun LongRange.contains(other: LongRange): Boolean {
-    return this.contains(other.first) && this.contains(other.last)
+    return other.first in this && other.last in this
 }
 
 fun LongRange.overlaps(other: LongRange): Boolean {
-    return this.contains(other.first) || this.contains(other.last) || other.contains(this.first) || other.contains(this.last)
+    return other.first in this || other.last in this || first in other || last in other
 }
 
 fun LongRange.intersect(other: LongRange): LongRange? {
     if (!overlaps(other)) return null
     if (contains(other)) return other
+    if (other.contains(this)) return this
 
-    val overlapsLowerEnd = other.first < first && other.last <= last
+    val overlapsLowerEnd = other.first < first && other.last in this
     return if (overlapsLowerEnd) {
         first..other.last
     } else {
@@ -34,7 +35,7 @@ fun LongRange.difference(other: LongRange): List<LongRange> {
         }
     }
 
-    val overlapsLowerEnd = other.first < first && other.last <= last
+    val overlapsLowerEnd = other.first < first && other.last in this
     return if (overlapsLowerEnd) {
         listOf(other.first..<first)
     } else {

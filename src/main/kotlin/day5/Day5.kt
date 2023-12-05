@@ -1,6 +1,5 @@
 package day5
 
-import ext.contains
 import ext.difference
 import ext.intersect
 import ext.overlaps
