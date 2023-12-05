@@ -3,6 +3,9 @@ package day5
 import ext.difference
 import ext.intersect
 import ext.overlaps
+import java.util.concurrent.ForkJoinPool
+import java.util.concurrent.atomic.AtomicLong
+
 
 data class Almanac(private val seeds: List<Long>, private val maps: List<CategoryMap>) {
     val lowestLocationNumber: Long
@@ -11,12 +14,43 @@ data class Almanac(private val seeds: List<Long>, private val maps: List<Categor
             .min()
 }
 
-data class RangedAlmanac(private val seedRanges: List<LongRange>, private val maps: List<CategoryMap>) {
+data class RangedAlmanac(val seedRanges: List<LongRange>, private val maps: List<CategoryMap>) {
     val lowestLocationNumber: Long
         get() = maps
             .fold(seedRanges) { itemRanges, categoryMap -> categoryMap.map(itemRanges) }
             .minBy { it.first }
             .first
+
+    /**
+     * Written after the challenge because I was interested in how long a brute force solution would take
+     * It's actually pretty doable. For my puzzle input, finishes in 2 minutes on an M1 MacBook Pro
+     */
+    fun bruteForcelowestLocationNumber(): Long {
+        val totalAmountOfSeeds = seedRanges.sumOf { it.last - it.first }
+        val processedSeeds = AtomicLong(0L)
+        val started = System.currentTimeMillis()
+
+        val minLocation = AtomicLong(Long.MAX_VALUE)
+
+        seedRanges.stream().parallel().forEach { range ->
+            range.forEach { seed ->
+                val location = maps.fold(seed) { item, categoryMap -> categoryMap.map(item) }
+                if(location < minLocation.get()) minLocation.set(location)
+
+                processedSeeds.set(processedSeeds.get() + 1)
+                if (processedSeeds.get() % 10_000_000L == 0L) {
+                    val percentageDone = processedSeeds.get() / totalAmountOfSeeds.toDouble()
+                    val timeElapsed = System.currentTimeMillis() - started
+                    val estimatedTotalTimeRequired = timeElapsed / percentageDone
+                    val eta = estimatedTotalTimeRequired - timeElapsed
+                    val etaInMinutes = eta / 1000 / 60
+                    println("${((percentageDone * 100 * 1000).toInt() / 1000.0)}% (ETA: ${(etaInMinutes * 100).toInt() / 100.0} minutes)")
+                }
+            }
+        }
+
+        return minLocation.get()
+    }
 }
 
 data class CategoryMap(
