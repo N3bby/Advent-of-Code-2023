@@ -134,6 +134,6 @@ class Day5Test {
 
         val almanac = parseRangedAlmanac(input)
 
-        assertThat(almanac.lowestLocationNumber).isEqualTo(0)
+        assertThat(almanac.lowestLocationNumber).isEqualTo(77435348L)
     }
 }
