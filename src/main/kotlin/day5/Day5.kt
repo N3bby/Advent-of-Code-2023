@@ -4,6 +4,21 @@ import ext.difference
 import ext.intersect
 import ext.overlaps
 
+data class Almanac(private val seeds: List<Long>, private val maps: List<CategoryMap>) {
+    val lowestLocationNumber: Long
+        get() = seeds
+            .map { seed -> maps.fold(seed) { item, categoryMap -> categoryMap.map(item) } }
+            .min()
+}
+
+data class RangedAlmanac(private val seedRanges: List<LongRange>, private val maps: List<CategoryMap>) {
+    val lowestLocationNumber: Long
+        get() = maps
+            .fold(seedRanges) { itemRanges, categoryMap -> categoryMap.map(itemRanges) }
+            .minBy { it.first }
+            .first
+}
+
 data class CategoryMap(
     private val source: String,
     private val destination: String,
@@ -75,19 +90,4 @@ data class SourceToDestinationRange(
             )
         }
     }
-}
-
-data class Almanac(private val seeds: List<Long>, private val maps: List<CategoryMap>) {
-    val lowestLocationNumber: Long
-        get() = seeds
-            .map { seed -> maps.fold(seed) { item, categoryMap -> categoryMap.map(item) } }
-            .min()
-}
-
-data class RangedAlmanac(private val seedRanges: List<LongRange>, private val maps: List<CategoryMap>) {
-    val lowestLocationNumber: Long
-        get() = maps
-            .fold(seedRanges) { itemRanges, categoryMap -> categoryMap.map(itemRanges) }
-            .minBy { it.first }
-            .first
 }
