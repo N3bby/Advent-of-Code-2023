@@ -8,7 +8,7 @@ data class Race(private val raceTime: Long, private val recordDistance: Long) {
     val chargeTimesBeatingRecord: LongRange
         get() {
             val Tr = raceTime.toBigDecimal()
-            val D = recordDistance
+            val D = recordDistance.toBigDecimal()
             // Tc is charge time
             //
             // We want to solve the inequality:
@@ -20,8 +20,8 @@ data class Race(private val raceTime: Long, private val recordDistance: Long) {
 
             val mathContext = MathContext(10)
 
-            val lowerZeroPoint = (Tr - (Tr.pow(2) - 4.toBigDecimal() * D.toBigDecimal()).sqrt(mathContext)) / 2.toBigDecimal()
-            val upperZeroPoint = (Tr + (Tr.pow(2) - 4.toBigDecimal() * D.toBigDecimal()).sqrt(mathContext)) / 2.toBigDecimal()
+            val lowerZeroPoint = (Tr - (Tr.pow(2) - 4.toBigDecimal() * D).sqrt(mathContext)) / 2.toBigDecimal()
+            val upperZeroPoint = (Tr + (Tr.pow(2) - 4.toBigDecimal() * D).sqrt(mathContext)) / 2.toBigDecimal()
 
             // If lower- or upperZeroPoint is an integer, then it will match the record for that chargeTime.
             // These should not be included, as we are only interested in breaking the record.
