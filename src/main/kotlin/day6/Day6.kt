@@ -16,7 +16,7 @@ data class Race(private val raceTime: Long, private val recordDistance: Long) {
             // Tr * Tc - Tc^2 > D
             // Tc^2 - Tr * Tc - D < 0
             //
-            // This is a quadractic equation, so we can use (-b ± sqrt(b^2 - 4ac)) / 2a to find zero points
+            // This is a quadratic equation, so we can use (-b ± sqrt(b^2 - 4ac)) / 2a to find zero points
 
             val mathContext = MathContext(10)
 
