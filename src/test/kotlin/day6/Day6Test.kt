@@ -1,6 +1,6 @@
 package day6
 
-import ext.multiply
+import ext.multiplicationOf
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import util.readInput
@@ -16,7 +16,7 @@ class Day6Test {
 
         val races = parseRaces(input)
 
-        val result = races.map { it.chargeTimesBeatingRecord.count() }.multiply()
+        val result = races.multiplicationOf { it.chargeTimesBeatingRecord.count() }
         assertThat(result).isEqualTo(288)
     }
 
@@ -24,8 +24,8 @@ class Day6Test {
     fun `part 1 - puzzle input`() {
         val races = parseRaces(readInput(6))
 
-        val result = races.map { it.chargeTimesBeatingRecord.count() }.multiply()
+        val result = races.multiplicationOf { it.chargeTimesBeatingRecord.count() }
 
-        assertThat(result).isEqualTo(0)
+        assertThat(result).isEqualTo(211904)
     }
 }
