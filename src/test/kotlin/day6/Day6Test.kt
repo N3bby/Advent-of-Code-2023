@@ -45,6 +45,6 @@ class Day6Test {
     fun `part 2 - puzzle input`() {
         val race = parseRaceIgnoringKerning(readInput(6))
 
-        assertThat(race.chargeTimesBeatingRecord.count()).isEqualTo(0)
+        assertThat(race.chargeTimesBeatingRecord.count()).isEqualTo(43364472)
     }
 }
