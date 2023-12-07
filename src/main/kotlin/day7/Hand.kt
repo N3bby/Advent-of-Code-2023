@@ -1,8 +1,8 @@
 package day7
 
-data class Hand(private val cards: List<Card>, private val bid: Int) : Comparable<Hand> {
+data class Hand(private val cards: List<Card>, private val bid: Int, private val considerJokers: Boolean) : Comparable<Hand> {
 
-    private val type = HandType.getHandType(cards)
+    val type = HandType.getHandType(cards, considerJokers)
 
     override fun compareTo(other: Hand): Int {
         val strengthDelta = this.type.strength - other.type.strength
@@ -21,19 +21,48 @@ data class Hand(private val cards: List<Card>, private val bid: Int) : Comparabl
 
 }
 
-enum class HandType(val strength: Int, private val predicate: (cards: List<Card>) -> Boolean) {
-    FIVE_OF_A_KIND(6, { cards -> cards.groupBy { it }.any { it.value.size == 5 } }),
-    FOUR_OF_A_KIND(5, { cards -> cards.groupBy { it }.any { it.value.size == 4 } }),
-    FULL_HOUSE(4, { cards ->
-        val cardGroups = cards.groupBy { it }
-        cardGroups.any { it.value.size == 3 } && cardGroups.any { it.value.size == 2 }
+enum class HandType(
+    val strength: Int,
+    private val predicate: (cardGroups: Map<Card, List<Card>>, jokers: Int) -> Boolean
+) {
+    FIVE_OF_A_KIND(6, { cardGroups, jokers ->
+        cardGroups.any { it.value.size + jokers == 5 }
     }),
-    THREE_OF_A_KIND(3, { cards -> cards.groupBy { it }.any { it.value.size == 3 } }),
-    TWO_PAIR(2, { cards -> cards.groupBy { it }.count { it.value.size == 2 } == 2 }),
-    ONE_PAIR(1, { cards -> cards.groupBy { it }.any { it.value.size == 2 } }),
-    HIGH_CARD(0, { _ -> true });
+    FOUR_OF_A_KIND(5, { cardGroups, jokers ->
+        cardGroups.any { it.value.size + jokers == 4 }
+    }),
+    FULL_HOUSE(4, { cardGroups, jokers ->
+        // Only case where we can use a joker for creating a full house is when we have two pairs and adding the joker to 1 of them
+        // Otherwise, it should be a FOUR_OF_A_KIND
+        if(jokers != 0 && TWO_PAIR.predicate(cardGroups, 0)) {
+            cardGroups.any { it.value.size + jokers == 3 } && cardGroups.any { it.value.size == 2 }
+        } else {
+            cardGroups.any { it.value.size == 3 } && cardGroups.any { it.value.size == 2 }
+        }
+    }),
+    THREE_OF_A_KIND(3, { cardGroups, jokers ->
+        cardGroups.any { it.value.size + jokers == 3 }
+    }),
+    TWO_PAIR(2, { cardGroups, _ ->
+        // It doesn't make sense to create a 2-pair if you have a joker since THREE_OF_A_KIND and up are better hands
+        // This means we can ignore that case
+        cardGroups.count { it.value.size == 2 } == 2
+    }),
+    ONE_PAIR(1, { cardGroups, jokers ->
+        cardGroups.any { it.value.size + jokers == 2 }
+    }),
+    HIGH_CARD(0, { _, _ -> true });
 
     companion object {
-        fun getHandType(cards: List<Card>) = entries.first { it.predicate(cards) }
+        fun getHandType(cards: List<Card>, considerJokers: Boolean): HandType {
+            return if (considerJokers) {
+                val jokers = cards.count { it.isJoker() }
+                val cardGroups = cards.filterNot { it.isJoker() }.groupBy { it }
+                entries.first { it.predicate(cardGroups, jokers) }
+            } else {
+                val cardGroups = cards.groupBy { it }
+                entries.first { it.predicate(cardGroups, 0) }
+            }
+        }
     }
 }
