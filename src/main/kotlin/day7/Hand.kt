@@ -26,7 +26,7 @@ enum class HandType(
     private val predicate: (cardGroups: Map<Card, List<Card>>, jokers: Int) -> Boolean
 ) {
     FIVE_OF_A_KIND(6, { cardGroups, jokers ->
-        cardGroups.any { it.value.size + jokers == 5 }
+        cardGroups.any { it.value.size + jokers == 5 } || jokers == 5
     }),
     FOUR_OF_A_KIND(5, { cardGroups, jokers ->
         cardGroups.any { it.value.size + jokers == 4 }

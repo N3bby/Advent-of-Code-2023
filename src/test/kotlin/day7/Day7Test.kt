@@ -1,7 +1,6 @@
 package day7
 
-import day7.HandType.FULL_HOUSE
-import day7.HandType.THREE_OF_A_KIND
+import day7.HandType.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import util.readInput
@@ -88,6 +87,12 @@ class Day7Test {
     fun `part 2 - three of a kind (with 1 joker) should not accidentally become a full house`() {
         val hand = parseHand("J5523 10", true)
         assertThat(hand.type).isEqualTo(THREE_OF_A_KIND)
+    }
+
+    @Test
+    fun `part 2 - all joker hand is a five of a kind`() {
+        val hand = parseHand("JJJJJ 10", true)
+        assertThat(hand.type).isEqualTo(FIVE_OF_A_KIND)
     }
 
     @Test
