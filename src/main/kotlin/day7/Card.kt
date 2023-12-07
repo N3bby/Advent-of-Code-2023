@@ -1,12 +1,12 @@
 package day7
 
 val CARD_STRENGTH_ORDER = listOf('A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2').reversed()
-val CARD_STRENGTH_ORDER_WITH_JOKERS = listOf('A', 'K', 'Q', 'T', '9', '8', '7', '6', '5', '4', '3', '2', 'J').reversed()
+val CARD_STRENGTH_ORDER_JOKERS_WILDCARDS = listOf('A', 'K', 'Q', 'T', '9', '8', '7', '6', '5', '4', '3', '2', 'J').reversed()
 
-data class Card(private val card: Char, private val considerJokers: Boolean) : Comparable<Card> {
+data class Card(private val card: Char, private val jokersAreWildcards: Boolean) : Comparable<Card> {
 
     private val strength by lazy {
-        (if (considerJokers) CARD_STRENGTH_ORDER_WITH_JOKERS else CARD_STRENGTH_ORDER).indexOf(card)
+        (if (jokersAreWildcards) CARD_STRENGTH_ORDER_JOKERS_WILDCARDS else CARD_STRENGTH_ORDER).indexOf(card)
     }
 
     fun isJoker(): Boolean {

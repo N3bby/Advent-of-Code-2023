@@ -1,8 +1,8 @@
 package day7
 
-data class Hand(private val cards: List<Card>, private val bid: Int, private val considerJokers: Boolean) : Comparable<Hand> {
+data class Hand(private val cards: List<Card>, private val bid: Int, private val jokersAreWildcards: Boolean) : Comparable<Hand> {
 
-    val type = HandType.getHandType(cards, considerJokers)
+    val type = HandType.getHandType(cards, jokersAreWildcards)
 
     override fun compareTo(other: Hand): Int {
         val strengthDelta = this.type.strength - other.type.strength
@@ -54,8 +54,8 @@ enum class HandType(
     HIGH_CARD(0, { _, _ -> true });
 
     companion object {
-        fun getHandType(cards: List<Card>, considerJokers: Boolean): HandType {
-            return if (considerJokers) {
+        fun getHandType(cards: List<Card>, jokersAreWildcards: Boolean): HandType {
+            return if (jokersAreWildcards) {
                 val jokers = cards.count { it.isJoker() }
                 val cardGroups = cards.filterNot { it.isJoker() }.groupBy { it }
                 entries.first { it.predicate(cardGroups, jokers) }
