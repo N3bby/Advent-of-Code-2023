@@ -23,33 +23,33 @@ data class Hand(private val cards: List<Card>, private val bid: Int, private val
 
 enum class HandType(
     val strength: Int,
-    private val predicate: (cardGroups: Map<Card, List<Card>>, jokers: Int) -> Boolean
+    private val predicate: (cardGroups: Map<Card, List<Card>>, wildcards: Int) -> Boolean
 ) {
-    FIVE_OF_A_KIND(6, { cardGroups, jokers ->
-        cardGroups.any { it.value.size + jokers == 5 } || jokers == 5
+    FIVE_OF_A_KIND(6, { cardGroups, wildcards ->
+        cardGroups.any { it.value.size + wildcards == 5 } || wildcards == 5
     }),
-    FOUR_OF_A_KIND(5, { cardGroups, jokers ->
-        cardGroups.any { it.value.size + jokers == 4 }
+    FOUR_OF_A_KIND(5, { cardGroups, wildcards ->
+        cardGroups.any { it.value.size + wildcards == 4 }
     }),
-    FULL_HOUSE(4, { cardGroups, jokers ->
+    FULL_HOUSE(4, { cardGroups, wildcards ->
         // Only case where we can use a joker for creating a full house is when we have two pairs and adding the joker to 1 of them
         // Otherwise, it should be a FOUR_OF_A_KIND
-        if(jokers != 0 && TWO_PAIR.predicate(cardGroups, 0)) {
-            cardGroups.any { it.value.size + jokers == 3 } && cardGroups.any { it.value.size == 2 }
+        if(wildcards != 0 && TWO_PAIR.predicate(cardGroups, 0)) {
+            cardGroups.any { it.value.size + wildcards == 3 } && cardGroups.any { it.value.size == 2 }
         } else {
             cardGroups.any { it.value.size == 3 } && cardGroups.any { it.value.size == 2 }
         }
     }),
-    THREE_OF_A_KIND(3, { cardGroups, jokers ->
-        cardGroups.any { it.value.size + jokers == 3 }
+    THREE_OF_A_KIND(3, { cardGroups, wildcards ->
+        cardGroups.any { it.value.size + wildcards == 3 }
     }),
     TWO_PAIR(2, { cardGroups, _ ->
         // It doesn't make sense to create a 2-pair if you have a joker since THREE_OF_A_KIND and up are better hands
         // This means we can ignore that case
         cardGroups.count { it.value.size == 2 } == 2
     }),
-    ONE_PAIR(1, { cardGroups, jokers ->
-        cardGroups.any { it.value.size + jokers == 2 }
+    ONE_PAIR(1, { cardGroups, wildcards ->
+        cardGroups.any { it.value.size + wildcards == 2 }
     }),
     HIGH_CARD(0, { _, _ -> true });
 
