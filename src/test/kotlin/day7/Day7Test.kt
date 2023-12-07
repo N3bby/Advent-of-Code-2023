@@ -99,6 +99,6 @@ class Day7Test {
     fun `part 2 - puzzle input`() {
         val hands = parseHands(readInput(7), true)
 
-        assertThat(hands.winnings).isEqualTo(0)
+        assertThat(hands.winnings).isEqualTo(253253225)
     }
 }
