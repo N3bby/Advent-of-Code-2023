@@ -1,5 +1,6 @@
 package day8
 
+import util.leastCommonMultiple
 import java.lang.IllegalStateException
 
 enum class Instruction {

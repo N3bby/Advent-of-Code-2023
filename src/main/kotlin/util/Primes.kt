@@ -1,4 +1,4 @@
-package day8
+package util
 
 import ext.multiplication
 import kotlin.math.ceil
