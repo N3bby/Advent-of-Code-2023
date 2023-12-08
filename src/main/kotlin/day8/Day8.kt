@@ -1,5 +1,6 @@
 package day8
 
+import util.Eta
 import util.leastCommonMultiple
 import java.lang.IllegalStateException
 
@@ -91,6 +92,35 @@ data class Network(private val nodes: List<Node>, private val instructions: List
     fun countNodesToTraverseAsGhost(): Long {
         val routeLengths = findLengthOfCyclesAsGhost().map { it.toLong() }
         return leastCommonMultiple(routeLengths)
+    }
+
+    /**
+     * Added after solving the exercise because I was interested in how long this would take
+     */
+    fun countNodesToTraverseAsGhostBruteForce(): Long {
+        /**
+         * So apparently this will take about 500 hours to brute force with my current algorithm... 😅
+         */
+        val estimatedTotalTraversalSteps = 14449445933179L
+        val eta = Eta(estimatedTotalTraversalSteps)
+
+        var nodesTraversed = 0L
+        var instructionIndex = 0
+        var currentNodes = nodes.filter { it.isFirstNodeForGhost() }
+
+        while (!currentNodes.all { it.isFinalNodeForGhost() }) {
+            val instruction = instructions[instructionIndex]
+            val nextNodes = currentNodes
+                .map { it.getNextNode(instruction) }
+                .map { nodesById[it]!! }
+
+            currentNodes = nextNodes
+            instructionIndex = (instructionIndex + 1) % instructions.size
+            nodesTraversed++
+            eta.addProcessedUnits(1L)
+        }
+
+        return nodesTraversed
     }
 }
 
