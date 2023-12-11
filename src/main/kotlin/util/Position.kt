@@ -1,6 +1,8 @@
 package util
 
 import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 
 data class Position(val x: Int, val y: Int): Comparable<Position> {
     operator fun plus(offset: Offset): Position {
@@ -32,6 +34,20 @@ data class Position(val x: Int, val y: Int): Comparable<Position> {
         if(yDiff != 0) return yDiff
         return 0
     }
+}
+
+data class Line(val pos1: Position, val pos2: Position) {
+
+    val manhattanDistance: Int get() = pos1.manhattanDistanceFrom(pos2)
+
+    fun crossesX(x: Int): Boolean {
+        return x in (min(pos1.x, pos2.x) .. max(pos1.x, pos2.x))
+    }
+
+    fun crossesY(y: Int): Boolean {
+        return y in (min(pos1.y, pos2.y) .. max(pos1.y, pos2.y))
+    }
+
 }
 
 data class Offset(val x: Int, val y: Int)
