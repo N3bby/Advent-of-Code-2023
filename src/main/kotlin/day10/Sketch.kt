@@ -1,5 +1,7 @@
 package day10
 
+import util.Position
+
 data class Sketch(private val tiles: Map<Position, Tile>) {
 
     fun getTile(position: Position): Tile? {

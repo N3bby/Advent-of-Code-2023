@@ -11,3 +11,11 @@ fun <T> List<T>.multiplicationOf(block: (T) -> Int): Int = this.map(block).multi
 
 fun <T> List<T>.rotateLeft(n: Int) = drop(n) + take(n)
 fun <T> List<T>.rotateRight(n: Int) = takeLast(n) + dropLast(n)
+
+fun <T: Comparable<T>> List<T>.getAllUniqueCombinations(): Set<Pair<T, T>> {
+    return this
+        .flatMap { outer -> map { inner -> Pair(outer, inner) } }
+        .filter { (val1, val2) -> val1 != val2 }
+        .map { it.sort() }
+        .toSet()
+}

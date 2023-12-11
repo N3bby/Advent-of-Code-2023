@@ -1,6 +1,8 @@
-package day10
+package util
 
-data class Position(val x: Int, val y: Int) {
+import kotlin.math.abs
+
+data class Position(val x: Int, val y: Int): Comparable<Position> {
     operator fun plus(offset: Offset): Position {
         return Position(x + offset.x, y + offset.y)
     }
@@ -18,6 +20,18 @@ data class Position(val x: Int, val y: Int) {
                 this + Offset(0, -1),
             )
         }
+
+    fun manhattanDistanceFrom(other: Position): Int {
+        return abs(other.x - x) + abs(other.y - y)
+    }
+
+    override fun compareTo(other: Position): Int {
+        val xDiff = x - other.x
+        val yDiff = y - other.y
+        if(xDiff != 0) return xDiff
+        if(yDiff != 0) return yDiff
+        return 0
+    }
 }
 
 data class Offset(val x: Int, val y: Int)

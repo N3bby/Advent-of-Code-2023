@@ -1,5 +1,7 @@
 package day10
 
+import util.Position
+
 fun parseSketch(input: String): Sketch {
     val tiles = input
         .lines()

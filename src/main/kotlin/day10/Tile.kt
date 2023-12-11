@@ -1,5 +1,8 @@
 package day10
 
+import util.Offset
+import util.Position
+
 sealed class Tile(
     val position: Position,
 ) {
