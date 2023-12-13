@@ -2,6 +2,7 @@ package day12
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import util.readInput
 
 class Day12Test {
 
@@ -17,9 +18,18 @@ class Day12Test {
         """.trimIndent()
 
         val springRecords = parseSpringRecords(input)
+        val possibleArrangements = springRecords.map { it.getPossibleSpringRecords().size }
 
-        assertThat(springRecords.sumOfPossibleArrangements).isEqualTo(21)
+        assertThat(possibleArrangements).containsExactly(1, 4, 1, 1, 4, 10)
+        assertThat(possibleArrangements.sum()).isEqualTo(21)
     }
 
+    @Test
+    fun `part 1 - puzzle input`() {
+        val springRecords = parseSpringRecords(readInput(12))
+
+        val possibleArrangements = springRecords.sumOf { it.getPossibleSpringRecords().size }
+        assertThat(possibleArrangements).isEqualTo(7350)
+    }
 }
 
